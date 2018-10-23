@@ -4,6 +4,7 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
-
+        "node-red-contrib-pixela": "x",
+        "node-red-dashboard": "x"
     }
 }

@@ -23,6 +23,7 @@
     command: kusanagi init --tz Asia/Tokyo --lang ja --keyboard ja --passwd {{ nrk.host.kusanagi_pass }} --nophrase --dbrootpass {{ nrk.host.kusanagi_dbrootpass }} --nginx --php7 --ruby24 --dbsystem mariadb
     responses:
       '.*[y/n]': 'y'
+    timeout: 300
 
 - name: Check KUSANAGI Profile directory
   stat:

@@ -1,0 +1,69 @@
+
+- name: Create Node-RED execution group
+  group:
+    name: "{{ nrk.host.nodered_group }}"
+
+- name: Create Node-RED execution user
+  user:
+    name: "{{ nrk.host.nodered_user }}"
+    group: "{{ nrk.host.nodered_group }}"
+
+# https://github.com/ansible/ansible/issues/24862
+- name: Fix owner Node-RED user directory
+  file:
+    path: /home/{{ nrk.host.nodered_user }}
+    state: directory
+    owner: "{{ nrk.host.nodered_user }}"
+    group: "{{ nrk.host.nodered_group }}"
+    mode: 0755
+
+- name: Create Node-RED directory
+  file:
+    path: /home/{{ nrk.host.nodered_user }}/.node-red
+    state: directory
+    owner: "{{ nrk.host.nodered_user }}"
+    group: "{{ nrk.host.nodered_group }}"
+    mode: 0755
+
+- name: Install yum Mpde.js packages
+  yum:
+    name: "{{ packages }}"
+    state: installed
+  vars:
+    packages:
+      - nodejs
+
+- name: Install Node-RED
+  command: npm install -g node-red
+
+- name: Copy Node-RED configuration
+  template:
+    src: "{{ item }}"
+    dest: /home/{{ nrk.host.nodered_user }}/.node-red/
+    owner: "{{ nrk.host.nodered_user }}"
+  with_items:
+    - package.json
+    - settings.js
+
+- name: Install 3rd-party Node-RED nodes
+  command: npm install
+  args:
+    chdir: /home/{{ nrk.host.nodered_user }}/.node-red/
+  become_user: "{{ nrk.host.nodered_user }}"
+
+- name: Create nginx proxy
+  template:
+    src: node-red.conf
+    dest: /etc/nginx/conf.d/node-red.conf
+
+- name: Create nodered.service
+  template:
+    src: node-red.service
+    dest: /etc/systemd/system/node-red.service
+
+- name: Enable & start Node-RED
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    state: restarted
+    name: node-red

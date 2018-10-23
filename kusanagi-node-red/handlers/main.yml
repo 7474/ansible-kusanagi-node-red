@@ -1,0 +1,8 @@
+---
+# handlers file for kusanagi-node-red
+
+- name: restart nginx
+  service: name=nginx state=restarted
+
+- name: restart node-red
+  service: name=node-red state=restarted

@@ -1,0 +1,12 @@
+---
+# tasks file for kusanagi-node-red
+
+- include: base.yml
+- include: kusanagi.yml
+- include: node-red.yml
+
+- name: Notify restert every play
+  command: /bin/true
+  notify:
+    - restart nginx
+    - restart node-red

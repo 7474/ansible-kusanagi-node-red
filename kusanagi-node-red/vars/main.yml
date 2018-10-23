@@ -1,0 +1,20 @@
+---
+# vars file for kusanagi-node-red
+
+nrk:
+  host:
+    kusanagi_profilename: node-red
+    kusanagi_pass: kusanagi_pass
+    kusanagi_dbrootpass: kusanagi_dbrootpass
+    kusanagi_dbname: kusanagi_dbname
+    kusanagi_dbuser: kusanagi_dbuser
+    kusanagi_dbpass: kusanagi_dbpass
+    kusanagi_email: node-red@example.com
+    nodered_domain: node-red.example.com
+    nodered_user: node-red
+    nodered_group: node-red
+    nodered_port: 8443
+  nodered:
+    admin_user: admin
+    # This default value is "admin".
+    admin_password_hash: $2a$08$jW1rdrUOZgxKbdCvTYXHWeApqZ/wOX2WnkdGmAOJqfIazwwT.JjIS

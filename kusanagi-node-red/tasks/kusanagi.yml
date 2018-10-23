@@ -1,0 +1,40 @@
+
+
+# https://kusanagi.tokyo/document/command/
+# XXX NOTICE: composer is already installed. Are you sure you want to reinstall composer? [y/n]
+# sudo pip install pexpect
+- name: Install yum python packages
+  yum:
+    name: "{{ packages }}"
+    state: installed
+  vars:
+    packages:
+      - python
+      - python-pip
+
+- name: Upgrade pip
+  command: pip install --upgrade pip
+
+- name: Install pexpect
+  command: pip install pexpect
+
+- name: Initialize KUSANAGI
+  expect:
+    command: kusanagi init --tz Asia/Tokyo --lang ja --keyboard ja --passwd {{ nrk.host.kusanagi_pass }} --nophrase --dbrootpass {{ nrk.host.kusanagi_dbrootpass }} --nginx --php7 --ruby24 --dbsystem mariadb
+    responses:
+      '.*[y/n]': 'y'
+
+- name: Check KUSANAGI Profile directory
+  stat:
+    path: /home/kusanagi/{{ nrk.host.kusanagi_profilename }}
+  register: profile_dir
+
+- name: Provision KUSANAGI Profile
+  command: kusanagi provision --lamp --fqdn {{ nrk.host.nodered_domain }} --email {{ nrk.host.kusanagi_email }} --dbname {{ nrk.host.kusanagi_dbname }} --dbuser {{ nrk.host.kusanagi_dbuser }} --dbpass {{ nrk.host.kusanagi_dbpass }} {{ nrk.host.kusanagi_profilename }}
+  when: not profile_dir.stat.exists
+
+- name: Set autorenewal
+  command: kusanagi autorenewal on
+
+- name: Configure KUSANAGI Instance
+  command: kusanagi configure

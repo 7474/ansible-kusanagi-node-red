@@ -1,0 +1,15 @@
+[Unit]
+Description=Node-RED
+After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node-red
+WorkingDirectory=/home/{{ nrk.host.nodered_user }}/
+KillMode=process
+Restart=always
+User={{ nrk.host.nodered_user }}
+Group={{ nrk.host.nodered_group }}
+
+[Install]
+WantedBy=multi-user.target

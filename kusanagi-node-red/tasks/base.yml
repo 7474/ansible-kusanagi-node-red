@@ -1,3 +1,6 @@
 
 - name: Update yum
-  yum: name=* state=latest
+  yum:
+    name: "*"
+    enablerepo: remi,remi-php56
+    state: latest

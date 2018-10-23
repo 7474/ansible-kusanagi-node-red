@@ -133,7 +133,10 @@ module.exports = {
            username: "{{ nrk.nodered.admin_user }}",
            password: "{{ nrk.nodered.admin_password_hash }}",
            permissions: "*"
-       }]
+       }],
+       default: {
+           permissions: "read"
+       }
     },
 
     // To password protect the node-defined HTTP endpoints (httpNodeRoot), or
